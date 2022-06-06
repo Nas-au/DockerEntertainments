@@ -161,7 +161,7 @@ $ sudo chown root:root /usr/bin/system-status
 ​	System Status Notification setup
 
 ```sh
-$ sudo 
+$ sudo crontab -e 
 ```
 
 ​	Sending Notification every day at 9 AM
