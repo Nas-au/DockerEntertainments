@@ -1,6 +1,6 @@
 
 
-# Installing Docker and Entertainments containers with Telegram Notifications and NTFS Volume shares
+# Installing Docker and Entertainments containers with Telegram Notifications and NFS Volume shares
 
 
 
@@ -300,33 +300,45 @@ $ sudo docker-compose up -d
 
  
 
-## 4. Setup NTFS Volume:
+## 4. Setup NFS Volume:
 
-​	add permenet connection to YOUR NTFS volume 
+​	add permenet connection to YOUR NFS volume 
 
 ```bash
 $ sudo apt install nfs-common -y
 ```
 
+​ Make a directory for your mount
+
+```bash
+$ sudo mkdir "$(pwd)"/nfs_share
+```
+
+​ Check if your NFS Server is mountable
+
+```bash
+$ showmount -e 192.168.x.x
+```
+
+​ Edit fstab
+
 ```bash
 $ sudo nano /etc/fstab
 ```
 
-```bash
-$ sudo mkdir "$(pwd)"/test
-```
-
-​ add to /etc/fstab and change YOU IP and PATH
+​ add to fstab and change YOU IP and Full path
 
 ```bash
 192.168.x.x:/path/to/your/share "$(pwd)"/nfs_share nfs nouser,rsize=8192,wsize=8192,atime,auto,defaults
 ```
 
+​ Mount Your NFS
+
 ```bash
 $ sudo mount -a
 ```
 
-​	Move downloaded content to YOUR NTFS volume share 
+​	Move downloaded content to YOUR NFS volume share 
 
 ```bash
 $ sudo nano /root/move_MOVIES.sh
@@ -348,12 +360,12 @@ MESSAGE="<strong> **Movie** Download Completed</strong>%0A- ${1}%0A"
 PAYLOAD="https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${MESSAGE}&parse_mode=HTML"
 curl -S -X POST "${PAYLOAD}" -w "\n\n" | sudo tee -a notificationsLog.txt
 mv "$(pwd)"/transmission/downloads/complete/Movies/* "$(pwd)"/nfs_share/Movies
-MESSAGE2="<strong> Moved to NTFS Share </strong>%0A- ${1}%0A"
+MESSAGE2="<strong> Moved to NFS Share </strong>%0A- ${1}%0A"
 PAYLOAD="https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${MESSAGE2}&parse_mode=HTML"
 curl -S -X POST "${PAYLOAD}" -w "\n\n" | sudo tee -a notificationsLog.txt
 ```
 
-​	Move downloaded content to YOUR NTFS volume share 
+​	Move downloaded content to YOUR NFS volume share 
 
 ```bash
 $ sudo nano /root/move_TV.sh
@@ -376,7 +388,7 @@ MESSAGE="<strong> **Episode** Download Completed</strong>%0A- ${1}%0A"
 PAYLOAD="https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${MESSAGE}&parse_mode=HTML"
 curl -S -X POST "${PAYLOAD}" -w "\n\n" | sudo tee -a notificationsLog.txt
 mv "$(pwd)"/transmission/downloads/complete/Tv/* "$(pwd)"/nfs_share/TvShows
-MESSAGE2="<strong>Moved to to NTFS Share</strong>%0A- ${1}%0A"
+MESSAGE2="<strong>Moved to to NFS Share</strong>%0A- ${1}%0A"
 PAYLOAD="https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${MESSAGE2}&parse_mode=HTML"
 curl -S -X POST "${PAYLOAD}" -w "\n\n" | sudo tee -a notificationsLog.txt
 ```
