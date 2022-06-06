@@ -390,10 +390,6 @@ $ sudo apt install incron
 ​	add moving scripts to incrontab
 
 ```bash
-$ sudo apt install incron
-```
-
-```bash
 $ sudo incrontab -e
 ```
 
